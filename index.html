@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEGO Reward Tracker</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: #f0f8ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    h1 {
+      color: #ff6f61;
+      font-size: 2.5rem;
+    }
+    .tracker {
+      background: #fff;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      width: 90%;
+      max-width: 500px;
+    }
+    .progress-section {
+      background-color: #e0f7fa;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-bottom: 2rem;
+      border: 2px dashed #00acc1;
+    }
+    .interaction-section {
+      background-color: #fff3e0;
+      padding: 1rem;
+      border-radius: 1rem;
+      border: 2px dashed #fb8c00;
+    }
+    .progress-bar {
+      background: #ccc;
+      border-radius: 1rem;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .progress-bar-fill {
+      background: #29b6f6;
+      height: 24px;
+      width: 0%;
+      color: white;
+      text-align: center;
+      line-height: 24px;
+      transition: width 0.5s ease-in-out;
+    }
+    .task {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0.75rem 0;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background: #2a9d8f;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+    .reset {
+      background: #e63946;
+      margin-top: 1.5rem;
+      width: 100%;
+    }
+    .level, .book-progress {
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧱 LEGO Reward Tracker</h1>
+  <div class="tracker">
+    <div class="progress-section">
+      <div class="level">🏆 LEGO Progress: <span id="legoProgress">0</span>%</div>
+      <div class="progress-bar">
+        <div class="progress-bar-fill" id="progressBar">0%</div>
+      </div>
+
+      <div class="book-progress">📚 Books Remaining: <span id="booksRemaining">12</span></div>
+      <div class="book-progress">🛏️ Sleep Streak: <span id="sleepStreak">0</span>/10</div>
+      <div class="book-progress">🥦 Greens Streak: <span id="greensStreak">0</span>/10</div>
+      <div class="book-progress">📓 Homework Streak: <span id="homeworkStreak">0</span>/10</div>
+    </div>
+
+    <div class="interaction-section">
+      <div class="task">
+        <span>🛏️ Bed on time</span>
+        <button onclick="completeTask('sleep')">✔</button>
+      </div>
+      <div class="task">
+        <span>📚 Read book</span>
+        <button onclick="completeTask('book')">✔</button>
+      </div>
+      <div class="task">
+        <span>🥦 Ate greens</span>
+        <button onclick="completeTask('greens')">✔</button>
+      </div>
+      <div class="task">
+        <span>📓 Homework before play</span>
+        <button onclick="completeTask('homework')">✔</button>
+      </div>
+
+      <button class="reset" onclick="resetProgress()">🚫 Broke Rule (Reset)</button>
+    </div>
+  </div>
+
+  <script>
+    let booksRemaining = parseInt(localStorage.getItem('booksRemaining')) || 12;
+    let sleepStreak = parseInt(localStorage.getItem('sleepStreak')) || 0;
+    let greensStreak = parseInt(localStorage.getItem('greensStreak')) || 0;
+    let homeworkStreak = parseInt(localStorage.getItem('homeworkStreak')) || 0;
+
+    function completeTask(task) {
+      if (task === 'book' && booksRemaining > 0) {
+        booksRemaining--;
+      } else if (task === 'sleep' && sleepStreak < 10) {
+        sleepStreak++;
+      } else if (task === 'greens' && greensStreak < 10) {
+        greensStreak++;
+      } else if (task === 'homework' && homeworkStreak < 10) {
+        homeworkStreak++;
+      }
+
+      updateProgress();
+    }
+
+    function updateProgress() {
+      localStorage.setItem('booksRemaining', booksRemaining);
+      localStorage.setItem('sleepStreak', sleepStreak);
+      localStorage.setItem('greensStreak', greensStreak);
+      localStorage.setItem('homeworkStreak', homeworkStreak);
+
+      let completed = 0;
+      if (booksRemaining === 0) completed++;
+      if (sleepStreak === 10) completed++;
+      if (greensStreak === 10) completed++;
+      if (homeworkStreak === 10) completed++;
+
+      let progressPercent = (completed / 4) * 100;
+      document.getElementById('progressBar').style.width = progressPercent + '%';
+      document.getElementById('progressBar').textContent = progressPercent + '%';
+      document.getElementById('legoProgress').textContent = progressPercent;
+
+      document.getElementById('booksRemaining').textContent = booksRemaining;
+      document.getElementById('sleepStreak').textContent = sleepStreak;
+      document.getElementById('greensStreak').textContent = greensStreak;
+      document.getElementById('homeworkStreak').textContent = homeworkStreak;
+
+      if (progressPercent === 100) {
+        alert('🎉 Congratulations! You completed all goals and earned the LEGO set!');
+      }
+    }
+
+    function resetProgress() {
+      localStorage.clear();
+      booksRemaining = 12;
+      sleepStreak = 0;
+      greensStreak = 0;
+      homeworkStreak = 0;
+      alert('⚠️ Game Over. Starting again.');
+      updateProgress();
+    }
+
+    window.onload = updateProgress;
+  </script>
+</body>
+</html>
