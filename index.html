@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LEGO Reward Tracker</title>
+  <title>LEGO Belonings Tracker</title>
   <style>
     body {
       font-family: 'Comic Sans MS', cursive, sans-serif;
@@ -24,6 +24,15 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
       width: 90%;
       max-width: 500px;
+    }
+    .lego-image {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .lego-image img {
+      max-width: 100%;
+      height: 200px;
+      border-radius: 1rem;
     }
     .progress-section {
       background-color: #e0f7fa;
@@ -82,39 +91,42 @@
   </style>
 </head>
 <body>
-  <h1>🧱 LEGO Reward Tracker</h1>
+  <h1>🧱 LEGO Belonings Tracker</h1>
+  <div class="lego-image">
+    <img src="lego-set.jpg" alt="LEGO Beloning">
+  </div>
   <div class="tracker">
     <div class="progress-section">
-      <div class="level">🏆 LEGO Progress: <span id="legoProgress">0</span>%</div>
+      <div class="level">🏆 LEGO Voortgang: <span id="legoProgress">0</span>%</div>
       <div class="progress-bar">
         <div class="progress-bar-fill" id="progressBar">0%</div>
       </div>
 
-      <div class="book-progress">📚 Books Remaining: <span id="booksRemaining">12</span></div>
-      <div class="book-progress">🛏️ Sleep Streak: <span id="sleepStreak">0</span>/10</div>
-      <div class="book-progress">🥦 Greens Streak: <span id="greensStreak">0</span>/10</div>
-      <div class="book-progress">📓 Homework Streak: <span id="homeworkStreak">0</span>/10</div>
+      <div class="book-progress">📚 Boeken over: <span id="booksRemaining">12</span></div>
+      <div class="book-progress">🛏️ Slaap Streak: <span id="sleepStreak">0</span>/10</div>
+      <div class="book-progress">🥦 Groenten Streak: <span id="greensStreak">0</span>/10</div>
+      <div class="book-progress">📓 Huiswerk Streak: <span id="homeworkStreak">0</span>/10</div>
     </div>
 
     <div class="interaction-section">
       <div class="task">
-        <span>🛏️ Bed on time</span>
+        <span>🛏️ Op tijd naar bed</span>
         <button onclick="completeTask('sleep')">✔</button>
       </div>
       <div class="task">
-        <span>📚 Read book</span>
+        <span>📚 Boek gelezen</span>
         <button onclick="completeTask('book')">✔</button>
       </div>
       <div class="task">
-        <span>🥦 Ate greens</span>
+        <span>🥦 Groenten gegeten</span>
         <button onclick="completeTask('greens')">✔</button>
       </div>
       <div class="task">
-        <span>📓 Homework before play</span>
+        <span>📓 Huiswerk vóór het spelen</span>
         <button onclick="completeTask('homework')">✔</button>
       </div>
 
-      <button class="reset" onclick="resetProgress()">🚫 Broke Rule (Reset)</button>
+      <button class="reset" onclick="resetProgress()">🚫 Regel overtreden (Reset)</button>
     </div>
   </div>
 
@@ -144,13 +156,10 @@
       localStorage.setItem('greensStreak', greensStreak);
       localStorage.setItem('homeworkStreak', homeworkStreak);
 
-      let completed = 0;
-      if (booksRemaining === 0) completed++;
-      if (sleepStreak === 10) completed++;
-      if (greensStreak === 10) completed++;
-      if (homeworkStreak === 10) completed++;
+      // Calculate progress: each action = 1 point, total needed = 42 (12 books + 10x3 tasks)
+      let totalProgress = (12 - booksRemaining) + sleepStreak + greensStreak + homeworkStreak;
+      let progressPercent = Math.round((totalProgress / 42) * 100);
 
-      let progressPercent = (completed / 4) * 100;
       document.getElementById('progressBar').style.width = progressPercent + '%';
       document.getElementById('progressBar').textContent = progressPercent + '%';
       document.getElementById('legoProgress').textContent = progressPercent;
@@ -161,7 +170,7 @@
       document.getElementById('homeworkStreak').textContent = homeworkStreak;
 
       if (progressPercent === 100) {
-        alert('🎉 Congratulations! You completed all goals and earned the LEGO set!');
+        alert('🎉 Gefeliciteerd! Je hebt alles voltooid en de LEGO-set verdiend!');
       }
     }
 
@@ -171,7 +180,7 @@
       sleepStreak = 0;
       greensStreak = 0;
       homeworkStreak = 0;
-      alert('⚠️ Game Over. Starting again.');
+      alert('⚠️ Regel overtreden. Alles opnieuw beginnen.');
       updateProgress();
     }
 
