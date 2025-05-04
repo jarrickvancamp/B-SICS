@@ -5,25 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LEGO Belonings Tracker</title>
   <style>
-    body {
+    html, body {
+      margin: 0;
+      padding: 100px;
+      width: calc(100vw - 200px);
+      height: calc(100vh - 200px);
+      overflow: hidden;
       font-family: 'Comic Sans MS', cursive, sans-serif;
       background: #f0f8ff;
+      box-sizing: border-box;
+    }
+    .container {
+      width: 100%;
+      height: 100%;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      padding: 2rem;
+      gap: 2rem;
+    }
+    .left, .right {
+      width: 45%;
+      transform: scale(0.9);
+      transform-origin: center;
     }
     h1 {
       color: #ff6f61;
       font-size: 2.5rem;
+      text-align: center;
     }
     .tracker {
       background: #fff;
       border-radius: 1rem;
-      padding: 2rem;
+      padding: 1.5rem;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-      width: 90%;
-      max-width: 500px;
     }
     .lego-image {
       text-align: center;
@@ -31,14 +45,14 @@
     }
     .lego-image img {
       max-width: 100%;
-      height: 200px;
+      height: 400px;
       border-radius: 1rem;
     }
     .progress-section {
       background-color: #e0f7fa;
       padding: 1rem;
       border-radius: 1rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       border: 2px dashed #00acc1;
     }
     .interaction-section {
@@ -55,78 +69,106 @@
     }
     .progress-bar-fill {
       background: #29b6f6;
-      height: 24px;
+      height: 28px;
       width: 0%;
       color: white;
       text-align: center;
-      line-height: 24px;
+      line-height: 28px;
+      font-size: 1.2rem;
       transition: width 0.5s ease-in-out;
     }
     .task {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin: 0.75rem 0;
+      margin: 1rem 0;
+      font-size: 1.4rem;
     }
     button {
-      padding: 0.5rem 1rem;
+      padding: 0.75rem 1.5rem;
       border: none;
       border-radius: 0.5rem;
       background: #2a9d8f;
       color: white;
       font-weight: bold;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       cursor: pointer;
     }
     .reset {
       background: #e63946;
       margin-top: 1.5rem;
       width: 100%;
+      font-size: 1.2rem;
     }
     .level, .book-progress {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       margin-bottom: 0.75rem;
       color: #333;
+    }
+    .no-no-rules {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 1.3rem;
+      background: #ffe0e0;
+      border: 2px dashed #e63946;
+      padding: 1rem;
+      border-radius: 1rem;
+    }
+    .no-no-rules ul {
+      margin: 0;
+      padding-left: 1.5rem;
     }
   </style>
 </head>
 <body>
-  <h1>🧱 LEGO Belonings Tracker</h1>
-  <div class="lego-image">
-    <img src="lego-set.jpg" alt="LEGO Beloning">
-  </div>
-  <div class="tracker">
-    <div class="progress-section">
-      <div class="level">🏆 LEGO Voortgang: <span id="legoProgress">0</span>%</div>
-      <div class="progress-bar">
-        <div class="progress-bar-fill" id="progressBar">0%</div>
+  <div class="container">
+    <div class="left">
+      <h1>🧱 LEGO Belonings Tracker</h1>
+      <div class="lego-image">
+        <img src="lego-reward.jpg" alt="LEGO Beloning">
       </div>
-
-      <div class="book-progress">📚 Boeken over: <span id="booksRemaining">12</span></div>
-      <div class="book-progress">🛏️ Slaap Streak: <span id="sleepStreak">0</span>/10</div>
-      <div class="book-progress">🥦 Groenten Streak: <span id="greensStreak">0</span>/10</div>
-      <div class="book-progress">📓 Huiswerk Streak: <span id="homeworkStreak">0</span>/10</div>
+      <div class="no-no-rules">
+        <strong>🚫 Niet doen:</strong>
+        <ul>
+          <li>Niet schreeuwen tegen mama & papa</li>
+          <li>Niet liegen</li>
+        </ul>
+        <p>Als dit gebeurt, moet je opnieuw beginnen!</p>
+      </div>
     </div>
+    <div class="right tracker">
+      <div class="progress-section">
+        <div class="level">🏆 LEGO Voortgang: <span id="legoProgress">0</span>%</div>
+        <div class="progress-bar">
+          <div class="progress-bar-fill" id="progressBar">0%</div>
+        </div>
 
-    <div class="interaction-section">
-      <div class="task">
-        <span>🛏️ Op tijd naar bed</span>
-        <button onclick="completeTask('sleep')">✔</button>
-      </div>
-      <div class="task">
-        <span>📚 Boek gelezen</span>
-        <button onclick="completeTask('book')">✔</button>
-      </div>
-      <div class="task">
-        <span>🥦 Groenten gegeten</span>
-        <button onclick="completeTask('greens')">✔</button>
-      </div>
-      <div class="task">
-        <span>📓 Huiswerk vóór het spelen</span>
-        <button onclick="completeTask('homework')">✔</button>
+        <div class="book-progress">📚 Boeken over: <span id="booksRemaining">12</span></div>
+        <div class="book-progress">🛏️ Slaap Streak: <span id="sleepStreak">0</span>/10</div>
+        <div class="book-progress">🥦 Groenten Streak: <span id="greensStreak">0</span>/10</div>
+        <div class="book-progress">📓 Huiswerk Streak: <span id="homeworkStreak">0</span>/10</div>
       </div>
 
-      <button class="reset" onclick="resetProgress()">🚫 Regel overtreden (Reset)</button>
+      <div class="interaction-section">
+        <div class="task">
+          <span>🛏️ Op tijd naar bed</span>
+          <button onclick="completeTask('sleep')">✔</button>
+        </div>
+        <div class="task">
+          <span>📚 Boek gelezen</span>
+          <button onclick="completeTask('book')">✔</button>
+        </div>
+        <div class="task">
+          <span>🥦 Groenten gegeten</span>
+          <button onclick="completeTask('greens')">✔</button>
+        </div>
+        <div class="task">
+          <span>📓 Huiswerk vóór het spelen</span>
+          <button onclick="completeTask('homework')">✔</button>
+        </div>
+
+        <button class="reset" onclick="resetProgress()">🚫 Regel overtreden (Reset)</button>
+      </div>
     </div>
   </div>
 
@@ -137,7 +179,7 @@
     let homeworkStreak = parseInt(localStorage.getItem('homeworkStreak')) || 0;
 
     function completeTask(task) {
-      if (task === 'book' && booksRemaining > 0) {
+      if (task === 'book' && booksRemaininag > 0) {
         booksRemaining--;
       } else if (task === 'sleep' && sleepStreak < 10) {
         sleepStreak++;
@@ -156,7 +198,6 @@
       localStorage.setItem('greensStreak', greensStreak);
       localStorage.setItem('homeworkStreak', homeworkStreak);
 
-      // Calculate progress: each action = 1 point, total needed = 42 (12 books + 10x3 tasks)
       let totalProgress = (12 - booksRemaining) + sleepStreak + greensStreak + homeworkStreak;
       let progressPercent = Math.round((totalProgress / 42) * 100);
 
